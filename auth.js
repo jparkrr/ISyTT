@@ -36,7 +36,7 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
       // This flow is documented here: http://dev.singly.com/authorization
       var queryString = querystring.stringify({
         client_id: clientId,
-        redirect_uri: sprintf('%s/callback', hostBaseUrl + ':' + hostPort),
+        redirect_uri: sprintf('%s/callback', hostBaseUrl),
         service: service
       });
       // If the user has a profile authorized for this service
