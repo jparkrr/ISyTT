@@ -1,0 +1,17 @@
+{
+  "gmail" : {
+    "user" : "USERNAME",
+    "password" : "PASSWORD"
+  },
+  "twilio" : {
+    "sid" : "SID",
+    "token" : "ACCESS_TOKEN",
+    "hostname" : "HOST_URL",
+    "hostnumber" : "+1xxxxxxxxxx"
+  },
+  "work" : {
+    "lat" : "LAT",
+    "lng" : "LNG",
+    "err" : "ERR"
+  }
+}
