@@ -3,6 +3,7 @@ var sprintf = require('sprintf').sprintf;
 var OAuth2 = require('oauth').OAuth2;
 var querystring = require('querystring');
 var express = require('express');
+var async = require('async');
 
 module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     var apiBaseUrl = 'https://api.singly.com';
@@ -24,33 +25,54 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     var oa = new OAuth2(clientId, clientSecret, apiBaseUrl);
 
     // A convenience method that takes care of adding the access token to requests
-    function getProtectedResource(path, session, callback) {
-      oa.getProtectedResource(apiBaseUrl + path, session.access_token, callback);
+    function getProtectedResource(path, access_token, callback) {
+      oa.getProtectedResource(apiBaseUrl + path, access_token, callback);
     }
 
     // Given the name of a service and the array of profiles, return a link to that
     // service that's styled appropriately (i.e. show a link or a checkmark).
-    function getLink(prettyName, profiles, token) {
+    function getLink(prettyName, profiles, pushes, token, callback) {
       var service = prettyName.toLowerCase();
-
-      // If the user has a profile authorized for this service
-      if (profiles && profiles[service] !== undefined) {
-        // Return a unicode checkmark so that the user doesn't try to authorize it again
-        var ret = sprintf('<span class="check">&#10003;</span> <a href="%s/services/%s?access_token=%s">%s</a> <a href="#" class="del" data-serv="%s" data-id="%s">X</a>', apiBaseUrl, service, token, prettyName, service, profiles[service][0]);
-        return ret;
-      }
-
       // This flow is documented here: http://dev.singly.com/authorization
       var queryString = querystring.stringify({
         client_id: clientId,
-          redirect_uri: sprintf('%s/callback', hostBaseUrl + ':' + hostPort),
-          service: service
+        redirect_uri: sprintf('%s/callback', hostBaseUrl + ':' + hostPort),
+        service: service
       });
-
-      return sprintf('<a href="%s/oauth/authorize?%s">%s</a>',
-          apiBaseUrl,
-          queryString,
-          prettyName);
+      // If the user has a profile authorized for this service
+      if (profiles && profiles[service] !== undefined) {
+        var ret = sprintf('<li><span class="check">&#10003;</span> <a href="%s/services/%s?access_token=%s">%s</a>', apiBaseUrl, service, token, prettyName);
+        getProtectedResource('/services/' + service, token, function(err, endpoints) {
+          try {
+            endpoints = JSON.parse(endpoints);
+          } catch(parseErr) {
+            return callback(ret);
+          }
+          ret += "<ul>";
+          async.forEachSeries(Object.keys(endpoints), function(index, cb) {
+            var url = apiBaseUrl + '/services/' + service + '/' + index;
+            if (pushes && pushes[url] !== undefined) {
+              ret += '<li><span class="check">&#10003;</span>' + index;
+            }
+            else {
+              ret += sprintf('<li><a href="/push?service=%s&endpoint=%s">%s</a>',
+                      service,
+                      index,
+                      index);
+            }
+            cb();
+          }, function (err) {
+            ret += '</ul>';
+            return callback(ret);
+          });
+        });
+      }
+      else {
+        return callback(sprintf('<li><a href="%s/oauth/authorize?%s">%s</a>',
+            apiBaseUrl,
+            queryString,
+            prettyName));
+      }
     }
 
     // Setup for the express web framework
@@ -82,21 +104,44 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     app.set('view engine', 'ejs');
 
     app.get('/', function(req, res) {
-      var i;
+      var i, j;
       var services = [];
 
       // For each service in usedServices, get a link to authorize it
-      for (i = 0; i < usedServices.length; i++) {
-        services.push({
-          name: usedServices[i],
-          link: getLink(usedServices[i], req.session.profiles, req.session.access_token)
+      async.forEach(usedServices, function(service, callback) {
+        getLink(service, req.session.profiles, req.session.pushes, req.session.access_token, function (link) {
+          services.push({
+            name: service,
+            link: link
+          });
+          callback();
         });
-      }
-
-      // Render out views/index.ejs, passing in the array of links and the session
-      res.render('index', {
-        services: services,
-        session: req.session
+      }, function(err) {
+        // Render out views/index.ejs, passing in the array of links and the session
+        res.render('index', {
+          services: services,
+          session: req.session
+        });
+      });
+    });
+    app.get('/push', function (req, res) {
+      var data = {};
+      data[apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint] = hostBaseUrl + ':' + hostPort + '/post';
+      request.post({
+        uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }, function (err, resp, body) {
+        try {
+          console.log(err);
+          body = JSON.parse(body);
+        } catch(parseErr) {
+          return res.send(parseErr, 500);
+        }
+        console.log(body);
+        res.redirect('/');
       });
     });
 
@@ -124,16 +169,39 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
         // Save the access_token for future API requests
         req.session.access_token = body.access_token;
 
-        // Fetch the user's service profile data
-        getProtectedResource('/profiles', req.session, function(err, profilesBody) {
-          try {
-            profilesBody = JSON.parse(profilesBody);
-          } catch(parseErr) {
-            return res.send(parseErr, 500);
-          }
-
-          req.session.profiles = profilesBody;
-
+        // Fetch the user's service profile and push data
+        async.parallel([
+          function(callback) {
+            getProtectedResource('/profiles', req.session.access_token, function(err, profilesBody) {
+              try {
+                profilesBody = JSON.parse(profilesBody);
+              } catch(parseErr) {
+                return res.send(parseErr, 500);
+              }
+              req.session.profiles = profilesBody;
+              console.log("getting profiles");
+              callback();
+            });
+          },
+          function(callback) {
+            getProtectedResource('/push', req.session.access_token, function(err, pushBody) {
+              if (err) {
+                req.session.pushes = {};
+                return callback();
+              }
+              try {
+                pushBody = JSON.parse(pushBody);
+              } catch(parseErr) {
+                console.log('push error');
+                return res.send(parseErr, 500);
+              }
+              req.session.pushes = pushBody.data;
+              console.log("getting push");
+              callback();
+            });
+        }],
+        function() {
+          console.log("done");
           res.redirect('/');
         });
       });
