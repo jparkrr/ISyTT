@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Singly node.js Example</title>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <script>
+   var accessToken = '<%= session.access_token %>';
+  </script>
+
+  <link rel="stylesheet" href="/styles.css" />
+ </head>
+
+ <body>
+  <h1><a href="/">ISyTT Configuration</a></h1>
+
+  <p>Register with one or more of these services to configure which pushes are being sent:</p>
+
+  <ul id="auth">
+  <% for (var i = 0; i < services.length; i++) { %>
+   <li id="<%= services[i].name %>"><%- services[i].link %></li>
+  <% } %>
+  </ul>
+
+  <div id="empowered">
+    <a href="http://singly.com/"><img src="/empowered.png" /></a>
+  </div>
+ </body>
+</html>
