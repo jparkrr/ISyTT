@@ -1,6 +1,6 @@
 var express = require('express');
 
-var hostBaseUrl = 'http://lvh.me';
+var hostBaseUrl = process.env.HOST || 'http://lvh.me';
 var hostPort = process.env.PORT || 3000;
 
 var clientId = process.env.CLIENT_ID;
