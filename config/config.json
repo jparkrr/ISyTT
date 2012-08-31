@@ -1,7 +1,7 @@
 {
   "work" : {
-    "lat" : "LAT",
-    "lng" : "LNG",
-    "err" : "ERR"
+    "lat" : "0",
+    "lng" : "0",
+    "err" : "5"
   }
 }
