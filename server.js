@@ -17,14 +17,16 @@ require('./auth')(server, clientId, clientSecret, hostBaseUrl, hostPort);
 server.post('/post', function(req, res) { 
   var body = req.body;
   console.log(body);
-
   var token = require('fs').readFileSync('./config/access_token.txt', 'utf8');
 
-  if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson'])) THEN.textNotify('Your friend has a status update', '+14152053607');
+  if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson']))
+    THEN.textNotify('Your friend has a status update', '+14152053607');
 
   var email = {to: "charlie@singly.com", subject: "push works!", message: "test body"}; 
   if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson'])) THEN.emailNotify(email);
 
+  if (IF.atWork(body)) THEN.textNotify('You checked in at work', '+14152053607');
+  if (IF.fitbitLow(body)) THEN.textNotify('Fitbit low battery', '+14152053607');
 
-  if (IF.atWork(body)) THEN.textNotify('Your fitbit has low battery', '+14152053607');
+  //Try for syntax like: IF(fitbitLow, body, THEN.textNotify, bam, bam);
 });
