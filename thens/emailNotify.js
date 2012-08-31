@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
-var gmail = require('../config/config.json').gmail;
 
 module.exports = function(email, to) {
+  var gmail = {user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASSWORD};
   var smtpTransport = nodemailer.createTransport("SMTP",{
     service: "Gmail",
     auth: {
@@ -12,7 +12,7 @@ module.exports = function(email, to) {
   var mailOptions = {
     to: email.to,
     subject: email.subject,
-    text: email.messagel
+    text: email.message
   };
   smtpTransport.sendMail(mailOptions, function(error, response){
   });
