@@ -7,7 +7,7 @@ module.exports = function(data, friends) {
   if (friends.indexOf(status.data.from.name) != -1) return true;
 
   //twitter
-  if (friends.indexOf(status.data.user.screen_name) return true;
+  if (friends.indexOf(status.data.user.screen_name) != -1) return true;
 
   return false;
 }
