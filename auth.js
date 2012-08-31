@@ -127,7 +127,7 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     });
     app.get('/push', function (req, res) {
       var data = {};
-      data[apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint] = hostBaseUrl + ':' + hostPort + '/post';
+      data[apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint] = hostBaseUrl + '/post';
       request.post({
         uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
         body: JSON.stringify(data),
