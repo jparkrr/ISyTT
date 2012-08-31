@@ -168,6 +168,9 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
 
         // Save the access_token for future API requests
         req.session.access_token = body.access_token;
+        fs.writeFile('./config/access_token.txt', req.session.access_token, 'utf8', function (err) {
+          if (err) console.log(err);
+        }); 
 
         // Fetch the user's service profile and push data
         async.parallel([
