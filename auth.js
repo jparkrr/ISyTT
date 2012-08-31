@@ -4,6 +4,7 @@ var OAuth2 = require('oauth').OAuth2;
 var querystring = require('querystring');
 var express = require('express');
 var async = require('async');
+var fs = require('fs');
 
 module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     var apiBaseUrl = 'https://api.singly.com';
