@@ -14,7 +14,7 @@ var server = express();
 require('./auth')(server, clientId, clientSecret, hostBaseUrl, hostPort);
 
 // POSTman to catch scripts and run posts
-server.post('/event', function(req, res) { 
+server.post('/post', function(req, res) { 
   var body = req.body;
   console.log(body);
 
