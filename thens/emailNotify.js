@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
 
-module.exports = function(email, to) {
+module.exports = function(email) {
   var gmail = {user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASSWORD};
   var smtpTransport = nodemailer.createTransport("SMTP",{
     service: "Gmail",

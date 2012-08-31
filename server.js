@@ -21,7 +21,6 @@ console.log(body);
   if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson'])) THEN.textNotify('Your friend has a status update', '+14152053607');
 
 var email = {to: "charlie@singly.com", subject: "push works!", message: "test body"}; 
-  if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson'])) THEN.emailNotify(email, '+14152053607');
-  if (IF.fitbitLow(body)) THEN.textNotify('Your fitbit has low battery', '+1xxxxxxxxxx');
-  if (IF.atWork(body)) THEN.share(['twitter'], 'Another day at work!', token);
+  if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson'])) THEN.emailNotify(email);
+  if (IF.atWork(body)) THEN.textNotify('Your fitbit has low battery', '+14152053607');
 });
