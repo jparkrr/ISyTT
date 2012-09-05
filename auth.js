@@ -137,7 +137,10 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     });
 
     app.get('/clear', function(req, res) {
-      clearPushes(req, apiBaseUrl, function() {
+      clearPushes(req, apiBaseUrl, function(err, resp, body) {
+        console.log(err);
+        console.log(resp);
+        console.log(body);
         res.redirect('/');
       });
     });
