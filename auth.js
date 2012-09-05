@@ -6,8 +6,7 @@ var express = require('express');
 var async = require('async');
 var fs = require('fs');
 
-function init() {
-console.log('initing!');
+function init(req) {
   request.post({
     uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
     body: '{}',
@@ -16,8 +15,6 @@ console.log('initing!');
     }
   });
 };
-
-init();
 
 module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     var apiBaseUrl = 'https://api.singly.com';
@@ -138,6 +135,12 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
         });
       });
     });
+
+    app.get('/clear', function(req, res) {
+      init(req);
+      res.redirect('/');
+    });
+
     app.get('/push', function (req, res) {
       var data = {};
       data[apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint] = hostBaseUrl + 'post';
