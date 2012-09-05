@@ -6,6 +6,19 @@ var express = require('express');
 var async = require('async');
 var fs = require('fs');
 
+function init() {
+console.log('initing!');
+  request.post({
+    uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
+    body: '{}',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+};
+
+init();
+
 module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     var apiBaseUrl = 'https://api.singly.com';
     var sessionSecret = '42';

@@ -1,4 +1,5 @@
 var express = require('express');
+var request = require('request');
 
 var hostBaseUrl = process.env.HOST || 'http://lvh.me';
 var hostPort = process.env.PORT || 3000;
