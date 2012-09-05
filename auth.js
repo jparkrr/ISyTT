@@ -8,7 +8,7 @@ var fs = require('fs');
 
 function clearPushes(req, base, callback) {
   request.post({
-    uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, base),
+    uri: sprintf('%s/push?access_token='+req.session.access_token, base),
     body: '{}',
     headers: {
       'Content-Type': 'application/json'
