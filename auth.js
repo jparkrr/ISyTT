@@ -14,7 +14,7 @@ console.log('initing!');
     headers: {
       'Content-Type': 'application/json'
     }
-  }
+  });
 };
 
 init();
