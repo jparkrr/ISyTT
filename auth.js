@@ -6,14 +6,14 @@ var express = require('express');
 var async = require('async');
 var fs = require('fs');
 
-function init(req) {
+function clearPushes(req, base, callback) {
   request.post({
-    uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
+    uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, base),
     body: '{}',
     headers: {
       'Content-Type': 'application/json'
     }
-  });
+  }, callback);
 };
 
 module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
@@ -137,8 +137,9 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     });
 
     app.get('/clear', function(req, res) {
-      init(req);
-      res.redirect('/');
+      clearPushes(req, apiBaseUrl, function() {
+        res.redirect('/');
+      });
     });
 
     app.get('/push', function (req, res) {
