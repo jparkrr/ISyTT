@@ -5,8 +5,8 @@ module.exports = function(email) {
   var smtpTransport = nodemailer.createTransport("SMTP",{
     service: "Gmail",
     auth: {
-      user: gmail.user,
-      pass: gmail.password
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD
     }
   });
   var mailOptions = {
