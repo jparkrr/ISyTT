@@ -157,7 +157,7 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
       }, function (err, resp, body) {
         try {
           console.log(err);
-          body = JSON.parse(body);
+          req.session.pushes = JSON.parse(body).data;
         } catch(parseErr) {
           return res.send(parseErr, 500);
         }
@@ -209,8 +209,6 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
           },
           function(callback) {
             getProtectedResource('/push', req.session.access_token, function(err, pushBody) {
- console.log('these are the pushes you are subscribed to');
- console.log(pushBody);
               if (err) {
                 req.session.pushes = {};
                 return callback();
