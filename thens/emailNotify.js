@@ -15,7 +15,9 @@ module.exports = function(email) {
     text: email.message
   };
   smtpTransport.sendMail(mailOptions, function(error, response){
+    console.log(error);
+    console.log(response);
+    smtpTransport.close();
   });
-  smtpTransport.close();
 };
 
