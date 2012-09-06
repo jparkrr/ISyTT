@@ -62,11 +62,12 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
           ret += "<ul>";
           async.forEachSeries(Object.keys(endpoints), function(index, cb) {
             var url = apiBaseUrl + '/services/' + service + '/' + index;
+            ret += '<li>';
             if (pushes && pushes[url] !== undefined) {
-              ret += '<li><span class="check">&#10003;</span>' + index;
+              ret += '<span class="check">&#10003;</span>' + index;
             }
             else {
-              ret += sprintf('<li><a href="/push?service=%s&endpoint=%s">%s</a>',
+              ret += sprintf('<a href="/push?service=%s&endpoint=%s">%s</a>',
                       service,
                       index,
                       index);
@@ -149,14 +150,11 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
       var pushes = req.session.pushes;
       var pushUrl = apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint;
       if (pushes && pushes[pushUrl]) {
-
-      }
-
-      var data = {};
-      data[pushUrl] = hostBaseUrl + 'post';
+        delete pushes[pushUrl];
+      } else pushes[pushUrl] = apiBaseUrl + 'post';
       request.post({
-        uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
-        body: JSON.stringify(data),
+        uri: sprintf('%s/push?access_token='+req.session.access_token, apiBaseUrl),
+        body: JSON.stringify(pushes),
         headers: {
           'Content-Type': 'application/json'
         }
