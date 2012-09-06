@@ -2,6 +2,8 @@ var work = require('../config/config.json').work;
 
 module.exports = function(data) {
 console.log('hello!');
+console.log(work);
+console.log(data[0].oembed);
   if (!data || !data[0] || !data[0].type || data[0].type != 'checkin') return false;
   return checkinIsNear(data[0].oembed, work, work.err); 
 };

@@ -19,7 +19,8 @@ server.post('/post', function(req, res) {
   var body = req.body;
   console.log(body);
   var token = require('fs').readFileSync('./config/access_token.txt', 'utf8');
-
+  if (IF.atWork(body)) THEN.textNotify('You checked in at work', '+14152053607');
+/*
   if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson']))
     THEN.textNotify('Your friend has a status update', '+14152053607');
 
@@ -28,8 +29,8 @@ server.post('/post', function(req, res) {
 
   if (IF.iTweet(body)) THEN.textNotify('You just tweeted', '+14152053607'); 
 
-  if (IF.atWork(body)) THEN.textNotify('You checked in at work', '+14152053607');
   if (IF.fitbitLow(body)) THEN.textNotify('Fitbit low battery', '+14152053607');
+  */
 
   //Try for syntax like: IF(fitbitLow, body, THEN.textNotify, bam, bam);
 });

@@ -231,11 +231,6 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
       });
     });
 
-    app.post('/post', function(req,res) {
-      console.log(req.body);
-      res.send('OK');
-    });
-
     app.listen(hostPort);
 
     console.log(sprintf('Listening at %s using API endpoint %s.', hostBaseUrl, apiBaseUrl));
