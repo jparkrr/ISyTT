@@ -1,4 +1,4 @@
-var scripts;
+var scripts = {};
 
 require('fs').readdirSync('./ifs').forEach(function (file) {
   var ignore = ['index.js', 'lib.js'];
