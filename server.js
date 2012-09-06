@@ -26,6 +26,8 @@ server.post('/post', function(req, res) {
   var email = {to: "charlie@singly.com", subject: "push works!", message: "test body"}; 
   if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson'])) THEN.emailNotify(email);
 
+  if (IF.iTweet(body)) THEN.textNotify('You just tweeted', '+14152053607'); 
+
   if (IF.atWork(body)) THEN.textNotify('You checked in at work', '+14152053607');
   if (IF.fitbitLow(body)) THEN.textNotify('Fitbit low battery', '+14152053607');
 
