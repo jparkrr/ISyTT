@@ -64,7 +64,7 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
             var url = apiBaseUrl + '/services/' + service + '/' + index;
             ret += '<li>';
             if (pushes && pushes[url] !== undefined) {
-              ret += '<span class="check">&#10003;</span>' + index;
+              ret += '<span class="check">&#10003;</span>';
             }
             ret += sprintf('<a href="/push?service=%s&endpoint=%s">%s</a>',
                    service,
