@@ -66,12 +66,10 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
             if (pushes && pushes[url] !== undefined) {
               ret += '<span class="check">&#10003;</span>' + index;
             }
-            else {
-              ret += sprintf('<a href="/push?service=%s&endpoint=%s">%s</a>',
-                      service,
-                      index,
-                      index);
-            }
+            ret += sprintf('<a href="/push?service=%s&endpoint=%s">%s</a>',
+                   service,
+                   index,
+                   index);
             cb();
           }, function (err) {
             ret += '</ul>';
