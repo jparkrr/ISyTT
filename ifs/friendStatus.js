@@ -1,4 +1,6 @@
-module.exports = function(data, friends) {
+module.exports = function(args) {
+  var data = args.body;
+  var friends = args.friends;
   
   if (!data || !data[0] || !data[0].type != 'status') return false;
 

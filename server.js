@@ -23,4 +23,8 @@ server.post('/post', function(req, res) {
   var email = {to: "charlie@singly.com", subject: "push works!", message: "test body"}; 
   IF ('atWork', body, THEN.emailNotify, email);
 
+  var data = {body: body, friends: ["Charlie Johnson", "Justin Parker"]};
+  email.message = "your friend has a status update";
+  IF ('friendStatus', data, THEN.emailNotify, email);
+
 });
