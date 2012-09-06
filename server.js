@@ -23,7 +23,7 @@ server.post('/post', function(req, res) {
   var email = {to: "charlie@singly.com", subject: "push works!", message: "test body"}; 
   if (IF.atWork(body)) THEN.emailNotify(email);
 
-  if (IF.atWork(body)) THEN.textNotify('You checked in at work', '+14152053607');
+//  if (IF.atWork(body)) THEN.textNotify('You checked in at work', '+14152053607');
 
 /*
   if (IF.friendStatus(body, ['Justin Parker', 'Charlie Johnson']))
