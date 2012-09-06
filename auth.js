@@ -146,8 +146,14 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
     });
 
     app.get('/push', function (req, res) {
+      var pushes = req.session.pushes;
+      var pushUrl = apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint;
+      if (pushes && pushes[pushUrl]) {
+
+      }
+
       var data = {};
-      data[apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint] = hostBaseUrl + 'post';
+      data[pushUrl] = hostBaseUrl + 'post';
       request.post({
         uri: sprintf('%s/push/upsert?access_token='+req.session.access_token, apiBaseUrl),
         body: JSON.stringify(data),

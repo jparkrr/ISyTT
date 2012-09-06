@@ -21,9 +21,6 @@ server.post('/post', function(req, res) {
   var token = require('fs').readFileSync('./config/access_token.txt', 'utf8');
   
   var email = {to: "charlie@singly.com", subject: "push works!", message: "test body"}; 
-//  if (IF.atWork(body)) THEN.emailNotify(email);
   IF ('atWork', body, THEN.emailNotify, email);
 
-
-  //Try for syntax like: IF(fitbitLow, body, THEN.textNotify, bam, bam);
 });
