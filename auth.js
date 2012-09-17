@@ -149,7 +149,7 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
       var pushUrl = apiBaseUrl + '/services/' + req.query.service + '/' + req.query.endpoint;
       if (pushes && pushes[pushUrl]) {
         delete pushes[pushUrl];
-      } else pushes[pushUrl] = apiBaseUrl + 'post';
+      } else pushes[pushUrl] = hostBaseUrl + 'post';
       request.post({
         uri: sprintf('%s/push?access_token='+req.session.access_token, apiBaseUrl),
         body: JSON.stringify(pushes),
