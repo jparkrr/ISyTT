@@ -163,7 +163,7 @@ module.exports = function(app, clientId, clientSecret, hostBaseUrl, hostPort) {
         } catch(parseErr) {
           return res.send(parseErr, 500);
         }
-        console.log(body);
+        console.log(req.session.pushes);
         res.redirect('/');
       });
     });
