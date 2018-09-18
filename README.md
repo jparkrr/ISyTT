@@ -10,7 +10,7 @@ and click on the Singly push subscriptions that you need to have access
 to. You'll also need to sign up for a singly app in order to receive
 the push notifications that initiate the recipes.
 
-Write if scripts in the the ifs/ directory and write then scripts
+Write if scripts in the ifs/ directory and write then scripts
 in the thens/ directory. No need to export anything, that is handled
 automatically. Just the name the script either <check>.js or <action>.js
 and that script will be exported accordingly.
